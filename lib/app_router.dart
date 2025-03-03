@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rick_and_morty/business_logic/cubit/characters_cubit.dart';
 import 'package:rick_and_morty/constants/strings.dart';
+import 'package:rick_and_morty/data/repository/characters_repository.dart';
+import 'package:rick_and_morty/data/web_services/characters_web_services.dart';
 import 'package:rick_and_morty/presention/screens/character_details.dart';
 import 'package:rick_and_morty/presention/screens/characters_screen.dart';
 
 class AppRouter {
+  late CharactersRepository charactersRepository;
+  late CharactersCubit charactersCubit;
+
+  AppRouter() {
+    charactersRepository = CharactersRepository(CharactersWebServices());
+    charactersCubit = CharactersCubit(charactersRepository);
+  }
+
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case charactersScreen:
-      return MaterialPageRoute(builder: (_) => const CharactersScreen());
+        return MaterialPageRoute(builder: (_) =>
+            BlocProvider(
+              create: (context) => charactersCubit,
+              child: CharactersScreen(),
+            ));
 
       case characterDetailsScreen:
         return MaterialPageRoute(builder: (_) => const CharacterDetails());
