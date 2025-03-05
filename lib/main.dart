@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty/app_router.dart';
+import 'package:rick_and_morty/data/repository/characters_repository.dart';
+import 'package:rick_and_morty/data/web_services/characters_web_services.dart';
 
 void main() {
   runApp(MyApp(appRouter: AppRouter()));

@@ -17,14 +17,33 @@ class CharactersWebServices {
 
 
 
-  Future<List<dynamic>> getAllCharacters() async {
+  Future<Map<String, dynamic>> getAllCharacters() async {
     try {
       Response response = await dio.get('character');
       print(response.data['info']);
       return response.data;
     } catch (e) {
       print(e.toString());
-      return [];
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> getQuotes() async {
+    Dio dio = Dio(
+      BaseOptions(
+        baseUrl: 'https://api.api-ninjas.com/v1/',
+          headers: {
+            'X-Api-Key' : 'byXzXMzK0Q8RFG2JdGPM9A==mpk904LUaltTfgWM'
+          }
+      )
+    );
+
+    try {
+      Response response = await dio.get('quotes');
+      return response.data[0];
+    } catch (e) {
+      print(e.toString());
+      return {};
     }
   }
 }

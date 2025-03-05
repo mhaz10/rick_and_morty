@@ -64,7 +64,7 @@ class Result {
   final String? gender;
   final Location? origin;
   final Location? location;
-  final String? image;
+  final String image;
   final List<String> episode;
   final String? url;
   final DateTime? created;
