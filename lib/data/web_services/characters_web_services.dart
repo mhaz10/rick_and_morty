@@ -17,7 +17,15 @@ class CharactersWebServices {
 
 
 
-  Future<Map<String, dynamic>> getAllCharacters() async {
+  Future<Map<String, dynamic>> getAllCharacters({int? page}) async {
+    Dio dio = Dio(
+        BaseOptions(
+            baseUrl: baseUrl,
+            queryParameters: {
+              'page': page
+            }
+        )
+    );
     try {
       Response response = await dio.get('character');
       print(response.data['info']);

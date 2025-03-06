@@ -15,10 +15,11 @@ class CharactersScreen extends StatefulWidget {
 
 class _CharactersScreenState extends State<CharactersScreen> {
   
-  late List<Result> allCharacters;
+  late CharactersModel allCharacters;
   late List<Result> searchedCharacters;
   bool isSearching = false;
   final searchTextController = TextEditingController();
+  int page = 1;
 
   Widget buildSearchField() {
     return TextField(
@@ -37,7 +38,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
   }
 
   void addSearchedCharactersToList(String searchedCharacter) {
-    searchedCharacters = allCharacters.where((character) =>
+    searchedCharacters = allCharacters.results.where((character) =>
         character.name!.toLowerCase().startsWith(searchedCharacter.toLowerCase())).toList();
     setState(() {});
   }
@@ -112,6 +113,50 @@ class _CharactersScreenState extends State<CharactersScreen> {
         child: Column(
           children: [
             buildCharactersList(),
+            SizedBox(height: 20,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    if (page > 0) {
+                      page --;
+                      BlocProvider.of<CharactersCubit>(context).getAllCharacters(page: page);
+                    }
+
+
+                    setState(() {
+
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.arrow_back_ios, color: Colors.white,),
+                      Text('prev', style: TextStyle(color: Colors.white),),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 50,),
+                GestureDetector(
+                  onTap: () {
+                    page ++;
+
+                    BlocProvider.of<CharactersCubit>(context).getAllCharacters(page: page);
+
+                    setState(() {
+
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      Text('next', style: TextStyle(color: Colors.white),),
+                      Icon(Icons.arrow_forward_ios, color: Colors.white,),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 20,)
           ],
         ),
       ),
@@ -130,8 +175,8 @@ class _CharactersScreenState extends State<CharactersScreen> {
         physics: ClampingScrollPhysics(),
         padding: EdgeInsets.zero,
 
-        itemCount: searchTextController.text.isEmpty ? allCharacters.length : searchedCharacters.length,
-        itemBuilder: (context, index) => CharacterItem(character: searchTextController.text.isEmpty ? allCharacters[index] : searchedCharacters[index]),);
+        itemCount: searchTextController.text.isEmpty ? allCharacters.results.length : searchedCharacters.length,
+        itemBuilder: (context, index) => CharacterItem(character: searchTextController.text.isEmpty ? allCharacters.results[index] : searchedCharacters[index]),);
   }
 
   Widget buildAppBarTitle () {
